@@ -1,13 +1,27 @@
 <!DOCTYPE html>
+
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Haximilian</title>
   <link rel="stylesheet" href="style.css">
+  <script>
+    var currentEmoji = 0;
+    var emojiCount = 2;
+    var emojiCycle = ["★", "☆"]
+    
+    function updateEmoji() {
+      currentEmoji = (currentEmoji + 1) % emojiCount;
+      var toUpdate = document.getElementById("welcome")
+      toUpdate.innerText = emojiCycle[currentEmoji] + " " + "Hello World!" + " " + emojiCycle[currentEmoji]
+      setTimeout(updateEmoji, 500)
+    }
+
+    window.onload = updateEmoji;
+  </script>
 </head>
 <body>
-
-  <h1>Hello World!</h1>
+  <h1 id="welcome">★ Hello World! ★</h1>
   <p>Hey, it's Maximilian! I'm a computer science student at the University of British Columbia. Recently, I've discovered the ancient chinese game of Go.</p>
-
 </body>
 </html>
