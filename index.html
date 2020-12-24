@@ -89,7 +89,7 @@
       context.attachShader(program, fragmentShader);
       context.linkProgram(program);
 
-      setTimeout(handler, 50);
+      window.requestAnimationFrame(handler);
 
       function handler() {
         update(elements);
@@ -100,7 +100,8 @@
           position.push(current.yPosition);
         })
         animation(position);
-        setTimeout(handler, 50);
+
+        window.requestAnimationFrame(handler);
       }
 
       function animation(positions) {
