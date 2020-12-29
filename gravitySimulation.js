@@ -1,7 +1,11 @@
 function simulation() {
-  var elements = new Array();
-  for (var i = 0; i < 16; i++) {
-    elements.push({
+  var objectCount = 16;
+
+  var elements = new Array(objectCount);
+  var position = new Array(objectCount * 2);
+
+  for (var i = 0; i < objectCount; i++) {
+    elements[i] = {
       mass: 1,
       xPosition: Math.random() - 0.5,
       yPosition: Math.random() - 0.5,
@@ -9,10 +13,9 @@ function simulation() {
       yVelocity: 0,
       xAcceleration: 0,
       yAcceleration: 0,
-    })
+    };
   }
 
-  // inplace update
   function update(everything) {
     everything.forEach((outerValue, outerIndex) => {
       outerValue.xAcceleration = 0;
@@ -23,6 +26,7 @@ function simulation() {
           var xDistance = outerValue.xPosition - innerValue.xPosition;
           var yDistance = outerValue.yPosition - innerValue.yPosition;
           var distance = xDistance * xDistance + yDistance * yDistance;
+
           var a = -0.0000001 * innerValue.mass / distance;
           outerValue.xAcceleration += (xDistance / Math.sqrt(distance)) * a;
           outerValue.yAcceleration += (yDistance / Math.sqrt(distance)) * a;
@@ -35,7 +39,6 @@ function simulation() {
       outerValue.yVelocity += outerValue.yAcceleration;
       outerValue.xPosition += outerValue.xVelocity;
       outerValue.yPosition += outerValue.yVelocity;
-
     })
   }
 
@@ -48,7 +51,7 @@ function simulation() {
       attribute vec4 a_position;
       void main() {
         gl_Position = a_position;
-        gl_PointSize = 10.0;
+        gl_PointSize = 8.0;
       }
     `
   )
@@ -70,16 +73,14 @@ function simulation() {
   context.attachShader(program, fragmentShader);
   context.linkProgram(program);
 
-  window.requestAnimationFrame(handler);
-
   function handler() {
     update(elements);
-    var position = new Array();
 
-    elements.forEach((current) => {
-      position.push(current.xPosition);
-      position.push(current.yPosition);
-    })
+    elements.forEach((current, index) => {
+      position[2 * index] = current.xPosition;
+      position[2 * index + 1] = current.yPosition;
+    });
+
     animation(position);
 
     window.requestAnimationFrame(handler);
@@ -91,7 +92,6 @@ function simulation() {
     context.bindBuffer(context.ARRAY_BUFFER, positionBuffer);
     context.bufferData(context.ARRAY_BUFFER, new Float32Array(positions), context.STATIC_DRAW);
 
-    context.viewport(0, 0, context.canvas.width, context.canvas.height);
     context.clearColor(0, 0, 0, 0);
     context.clear(context.COLOR_BUFFER_BIT);
 
@@ -106,7 +106,9 @@ function simulation() {
     context.useProgram(program);
 
     var offset = 0;
-    var count = 16;
+    var count = objectCount;
     context.drawArrays(context.POINTS, offset, count);
   }
+
+  window.requestAnimationFrame(handler);
 }

@@ -7,21 +7,9 @@
   <link rel="stylesheet" href="style.css">
   <script type="text/javascript" src="gravitySimulation.js"></script>
   <script>
-    var currentEmoji = 0;
-    var emojiCount = 2;
-    var emojiCycle = ["★", "☆"]
-
-    function updateEmoji() {
-      currentEmoji = (currentEmoji + 1) % emojiCount;
-      var toUpdate = document.getElementById("welcome")
-      toUpdate.innerText = emojiCycle[currentEmoji] + " " + "Hello World!" + " " + emojiCycle[currentEmoji]
-      setTimeout(updateEmoji, 500)
-    }
-
     window.onload = () => {
       window.requestAnimationFrame(simulation);
     }
-
   </script>
 </head>
 <body>
