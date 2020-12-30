@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Haximilian</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="text/javascript" src="database.js"></script>
+  <script>
+    window.onload = () => {
+      main();
+    }
+  </script>
+</head>
+<body>
+  <h1>Database Components & Properties</h1>
+  <p>Serial</p>
+  <p>Isolation</p>
+  <p>Atomicity</p>
+  <div id="records"></div>
+  <div id="journal">
+  </div>
+  <div id="start">
+    <h3>start</h3>
+    <button type="button">start</button>
+  </div>
+  <div id="update">
+    <h3>update</h3>
+    <label>key:</label>
+    <input type="text" id="fname" name="fname"></input>
+    <label>value:</label>
+    <input type="text" id="fname" name="fname"></input>
+    <label>transaction:</label>
+    <input type="text" id="fname" name="fname"></input>
+    <button type="button">update</button>
+  </div>
+  <div id="commit">
+    <h3>commit</h3>
+    <label>transaction:</label>
+    <input type="text" id="fname" name="fname"></input>
+    <button type="button">commit</button>
+  </div>
+
+
+  // output window
+
+  // on going transaction
+
+  // never wipe out the current transaction number...
+</body>
+</html>
