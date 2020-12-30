@@ -1,0 +1,12 @@
+body {
+    font-family: "Lucida Console", Courier, monospace;
+    text-align: center;
+}
+
+.side-by-side-container {
+    display: flex;
+}
+  
+.side-by-side-element {
+    flex: 33%;
+}
