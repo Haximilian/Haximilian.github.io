@@ -7,10 +7,7 @@
     <link rel="stylesheet" href="databaseStyle.css">
     <script type="text/javascript" src="database.js"></script>
     <script>
-      window.onload = () => {
-        initializeRecords(8);
-        displayRecords(records);
-      }
+      window.onload = initialize;
     </script>
   </head>
   <body>
@@ -29,25 +26,29 @@
         <div id="journal"></div>
       </div>
     </div>
-    <div id="start">
+    <div id="start" class="action-border">
       <h3>start</h3>
       <button type="button" onclick="startTransaction()">start</button>
     </div>
-    <div id="update">
+    <div id="update" class="action-border">
       <h3>update</h3>
-      <label>key:</label>
-      <input type="text" id="fname" name="fname"></input>
-      <label>value:</label>
-      <input type="text" id="fname" name="fname"></input>
-      <label>transaction:</label>
-      <input type="text" id="fname" name="fname"></input>
-      <button type="button">update</button>
+      <label for="update-transaction">transaction:</label>
+      <input type="text" id="update-transaction"></input>
+      <label for="update-key">key:</label>
+      <input type="text" id="update-key"></input>
+      <label for="update-value">value:</label>
+      <input type="text" id="update-value"></input>
+      <input type="submit" value="update" onclick="updateWrapper()"></input>
     </div>
     <div id="commit">
       <h3>commit</h3>
       <label>transaction:</label>
       <input type="text" id="fname" name="fname"></input>
       <button type="button">commit</button>
+    </div>
+    <div id="system-crash">
+      <h3>system-crash</h3>
+      <input type="submit" value="system-crash"></input>
     </div>
   </body>
 </html>

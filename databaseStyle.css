@@ -10,3 +10,8 @@ body {
 .side-by-side-element {
     flex: 33%;
 }
+
+.action-border {
+  outline-color:red;
+  outline-style: solid;
+}

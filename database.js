@@ -5,6 +5,11 @@ var journal = new Array();
 var currentTransaction = 1;
 var ongoingTransactions = new Array();
 
+function initialize() {
+  initializeRecords(8);
+  displayRecords(records);
+}
+
 function initializeRecords(count) {
   var defaultKeys = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K"];
 
@@ -95,10 +100,41 @@ function startTransaction() {
   return toReturn;
 }
 
+function updateWrapper() {
+  var transaction = document.getElementById("update-transaction");
+  var key = document.getElementById("update-key");
+  var value = document.getElementById("update-value");
+
+  var transactionValue = parseInt(transaction.value);
+  var keyValue = key.value;
+  var valueValue = parseInt(value.value);
+
+  transaction.value = "";
+  key.value = "";
+  value.value = ""
+
+  if (transactionValue == "" || keyValue == "" || valueValue == "") {
+    return;
+  }
+
+  if (!update(transactionValue, keyValue, valueValue)) {
+    console.log("update: fail");
+  }
+
+  // update display
+  displayJournal(journal);
+  displayRecords(records);
+}
+
 function update(transaction, key, value) {
+  // check if key exists
+  if (!records.hasOwnProperty(key)) {
+    return false;
+  }
+
   // check if transaction exists
   if (!ongoingTransactions.includes(transaction)) {
-    return;
+    return false;
   }
 
   // acquire lock if available
@@ -108,19 +144,21 @@ function update(transaction, key, value) {
 
   if (records[key].lock == transaction) {
     // update journal
-    journal.push({
-      previousValue: records,
-      currentValue: value,
-      transaction: transaction
-    });
+    journal.push(`{
+      action: \"update\",
+      key: \"${key}\",
+      previousValue: ${records[key].value},
+      currentValue: ${value},
+      transaction: ${transaction}
+    },`);
 
     // update record
-    records[key] = value;
+    records[key].value = value;
+
+    return true;
   }
 
-  // update display
-  displayJournal();
-  displayRecords();
+  return false;
 }
 
 // commit...
