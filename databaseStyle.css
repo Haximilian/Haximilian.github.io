@@ -12,6 +12,8 @@ body {
 }
 
 .action-border {
-  outline-color:red;
-  outline-style: solid;
+  border-color:red;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 5px;
 }

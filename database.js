@@ -3,7 +3,7 @@ var journal = new Array();
 
 // transaction should never be assigned an identifier of zero
 var currentTransaction = 1;
-var ongoingTransactions = new Array();
+var ongoingTransactions = new Object();
 
 function initialize() {
   initializeRecords(8);
@@ -79,7 +79,7 @@ function displayOnGoingTransactions(toDisplay) {
   var journalLocation = document.getElementById('on-going-transaction');
   journalLocation.innerHTML = "";
 
-  for (var element of toDisplay) {
+  for (var element in toDisplay) {
     var inner = document.createElement("p");
     inner.innerHTML = element;
 
@@ -92,7 +92,9 @@ function startTransaction() {
   currentTransaction += 1;
 
   // update on-going transaction set
-  ongoingTransactions.push(toReturn);
+  ongoingTransactions[toReturn] = {
+    acquiredLocks: []
+  };
 
   displayOnGoingTransactions(ongoingTransactions);
 
@@ -132,14 +134,15 @@ function update(transaction, key, value) {
     return false;
   }
 
-  // check if transaction exists
-  if (!ongoingTransactions.includes(transaction)) {
+  // check if transaction is ongoing
+  if (!ongoingTransactions.hasOwnProperty(transaction)) {
     return false;
   }
 
   // acquire lock if available
   if (records[key].lock == 0) {
     records[key].lock = transaction;
+    ongoingTransactions[transaction].acquiredLocks.push(key);
   }
 
   if (records[key].lock == transaction) {
@@ -161,8 +164,43 @@ function update(transaction, key, value) {
   return false;
 }
 
-// commit...
-// release all locks
+function commitWrapper() {
+  var transaction = document.getElementById("commit-transaction");
+
+  var transactionValue = parseInt(transaction.value);
+
+  transaction.value = "";
+
+  commit(transactionValue);
+
+  // update display
+  displayOnGoingTransactions(ongoingTransactions);
+  displayJournal(journal);
+}
+
+function commit(t) {
+  // check if transaction is ongoing
+  if (!ongoingTransactions.hasOwnProperty(t)) {
+    return false;
+  }
+
+  // wait for all updates to persist in non-volatile memory
+
+  // write journal entry
+  journal.push(`{
+      action: \"commit\",
+      transaction: ${t}
+    },`
+  );
+
+  // release all locks held by transaction
+  for (var recordKey of ongoingTransactions[t].acquiredLocks) {
+    records[recordKey].lock = 0;
+  }
+
+  // update ongoing transactions
+  delete ongoingTransactions[t];
+}
 
 // reboot method
 // reset on-going transaction set

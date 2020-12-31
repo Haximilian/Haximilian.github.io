@@ -12,20 +12,6 @@
   </head>
   <body>
     <h1>Database Components & Properties</h1>
-    <div class="side-by-side-container">
-      <div class="side-by-side-element">
-        <h3>records</h3>
-        <div id="records"></div>
-      </div>
-      <div class="side-by-side-element">
-        <h3>on-going transactions</h3>
-        <div id="on-going-transaction"></div>
-      </div>
-      <div class="side-by-side-element">
-        <h3>journal</h3>
-        <div id="journal"></div>
-      </div>
-    </div>
     <div id="start" class="action-border">
       <h3>start</h3>
       <button type="button" onclick="startTransaction()">start</button>
@@ -40,15 +26,29 @@
       <input type="text" id="update-value"></input>
       <input type="submit" value="update" onclick="updateWrapper()"></input>
     </div>
-    <div id="commit">
+    <div id="commit" class="action-border">
       <h3>commit</h3>
-      <label>transaction:</label>
-      <input type="text" id="fname" name="fname"></input>
-      <button type="button">commit</button>
+      <label for="commit-transaction">transaction:</label>
+      <input type="text" id="commit-transaction"></input>
+      <input type="submit" value="commit" onclick="commitWrapper()"></input>
     </div>
-    <div id="system-crash">
+    <div id="system-crash" class="action-border">
       <h3>system-crash</h3>
       <input type="submit" value="system-crash"></input>
+    </div>
+    <div class="side-by-side-container">
+      <div class="side-by-side-element">
+        <h3>records</h3>
+        <div id="records"></div>
+      </div>
+      <div class="side-by-side-element">
+        <h3>on-going transactions</h3>
+        <div id="on-going-transaction"></div>
+      </div>
+      <div class="side-by-side-element">
+        <h3>journal</h3>
+        <div id="journal"></div>
+      </div>
     </div>
   </body>
 </html>
