@@ -148,12 +148,12 @@ function update(transaction, key, value) {
   if (records[key].lock == transaction) {
     // update journal
     journal.push(`{
-      action: \"update\",
-      key: \"${key}\",
-      previousValue: ${records[key].value},
-      currentValue: ${value},
-      transaction: ${transaction}
-    },`);
+      \"action\": \"update\",
+      \"key\": \"${key}\",
+      \"previousValue\": ${records[key].value},
+      \"currentValue\": ${value},
+      \"transaction\": ${transaction}
+    }`);
 
     // update record
     records[key].value = value;
@@ -174,6 +174,7 @@ function commitWrapper() {
   commit(transactionValue);
 
   // update display
+  displayRecords(records);
   displayOnGoingTransactions(ongoingTransactions);
   displayJournal(journal);
 }
@@ -188,9 +189,9 @@ function commit(t) {
 
   // write journal entry
   journal.push(`{
-      action: \"commit\",
-      transaction: ${t}
-    },`
+      \"action\": \"commit\",
+      \"transaction\": ${t}
+    }`
   );
 
   // release all locks held by transaction
@@ -201,6 +202,40 @@ function commit(t) {
   // update ongoing transactions
   delete ongoingTransactions[t];
 }
+
+// given the journal, returns a list on of uncommited transactions
+function uncommitedTransactions(journal) {
+  allTransactions = new Set();
+  commitedTransactions = new Set();
+
+  for (var element of journal) {
+    var object = JSON.parse(element);
+
+    allTransactions.add(object.transaction);
+    if (object.action == "commit") {
+      commitedTransactions.add(object.transaction);
+    }
+  }
+
+  var r = new Array();
+
+  console.log(allTransactions)
+  console.log(commitedTransactions)
+
+  allTransactions.forEach(elem => {
+    if (!commitedTransactions.has(elem)) {
+      r.push(elem);
+    }
+  });
+
+  return r;
+}
+
+// shutdown button
+// restart button
+// display state ~ calls all display methods
+// use textbox
+// drop down box for transaction and entries
 
 // reboot method
 // reset on-going transaction set
