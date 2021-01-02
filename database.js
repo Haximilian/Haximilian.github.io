@@ -8,6 +8,7 @@ var ongoingTransactions = new Object();
 function initialize() {
   initializeRecords(8);
   displayRecords(records);
+  updateKeyDropDown(records);
 }
 
 function initializeRecords(count) {
@@ -51,6 +52,32 @@ function generateRecordsMarkup(toDisplay) {
   `;
 
   return markup;
+}
+
+function updateKeyDropDown(availableKeys) {
+  var element = document.getElementById('update-key')
+
+  var markup = "";
+
+  for (var key in availableKeys) {
+    markup += `<option value=\"${key}\">${key}</option>`
+  }
+
+  element.innerHTML = markup;
+}
+
+function updateTransactionDropDown(availableTransactions) {
+  var dropDownUpdate = document.getElementById('update-transaction')
+  var dropDownCommit = document.getElementById('commit-transaction')
+
+  var markup = "";
+
+  for (var key in availableTransactions) {
+    markup += `<option value=\"${key}\">${key}</option>`
+  }
+
+  dropDownUpdate.innerHTML = markup;
+  dropDownCommit.innerHTML = markup;
 }
 
 function displayRecords(toDisplay) {
@@ -97,6 +124,7 @@ function startTransaction() {
   };
 
   displayOnGoingTransactions(ongoingTransactions);
+  updateTransactionDropDown(ongoingTransactions);
 
   // update output
   return toReturn;
@@ -177,6 +205,7 @@ function commitWrapper() {
   displayRecords(records);
   displayOnGoingTransactions(ongoingTransactions);
   displayJournal(journal);
+  updateTransactionDropDown(ongoingTransactions);
 }
 
 function commit(t) {
@@ -219,9 +248,6 @@ function uncommitedTransactions(journal) {
 
   var r = new Array();
 
-  console.log(allTransactions)
-  console.log(commitedTransactions)
-
   allTransactions.forEach(elem => {
     if (!commitedTransactions.has(elem)) {
       r.push(elem);
@@ -231,8 +257,39 @@ function uncommitedTransactions(journal) {
   return r;
 }
 
-// shutdown button
-// restart button
+function systemCrash() {
+  ongoingTransactions = [];
+  releaseLocks(records);
+
+  var toRollBack = uncommitedTransactions(journal);
+
+  var reverseJournal = journal.reverse();
+  var newJournal = reverseJournal;
+
+  reverseJournal.forEach((element, i) => {
+    var obj = JSON.parse(element)
+
+    if (toRollBack.includes(obj.transaction) && obj.action == "update") {
+      records[obj.key].value = obj.previousValue;
+      delete newJournal[i];
+    }
+  });
+
+  journal = newJournal.reverse().filter(Boolean);
+
+  displayJournal(journal);
+  displayRecords(records);
+  displayOnGoingTransactions(ongoingTransactions);
+  updateTransactionDropDown(ongoingTransactions);
+}
+
+function releaseLocks(r) {
+  for (var recordKey in r) {
+
+    r[recordKey].lock = 0;
+  }
+}
+
 // display state ~ calls all display methods
 // use textbox
 // drop down box for transaction and entries

@@ -6,7 +6,7 @@ body {
 .side-by-side-container {
     display: flex;
 }
-  
+
 .side-by-side-element {
     flex: 33%;
 }
@@ -15,5 +15,6 @@ body {
   border-color:red;
   border-style: solid;
   border-radius: 5px;
+  margin: 15px;
   padding: 5px;
 }

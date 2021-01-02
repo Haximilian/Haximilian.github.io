@@ -19,9 +19,9 @@
     <div id="update" class="action-border">
       <h3>update</h3>
       <label for="update-transaction">transaction:</label>
-      <input type="text" id="update-transaction"></input>
+      <select id="update-transaction"></select>
       <label for="update-key">key:</label>
-      <input type="text" id="update-key"></input>
+      <select id="update-key"></select>
       <label for="update-value">value:</label>
       <input type="text" id="update-value"></input>
       <input type="submit" value="update" onclick="updateWrapper()"></input>
@@ -29,12 +29,12 @@
     <div id="commit" class="action-border">
       <h3>commit</h3>
       <label for="commit-transaction">transaction:</label>
-      <input type="text" id="commit-transaction"></input>
+      <select id="commit-transaction"></select>
       <input type="submit" value="commit" onclick="commitWrapper()"></input>
     </div>
     <div id="system-crash" class="action-border">
       <h3>system-crash</h3>
-      <input type="submit" value="system-crash"></input>
+      <input type="submit" value="system-crash" onclick="systemCrash()"></input>
     </div>
     <div class="side-by-side-container">
       <div class="side-by-side-element">
