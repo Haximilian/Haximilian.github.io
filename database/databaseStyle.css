@@ -1,0 +1,35 @@
+body {
+    font-family: "Lucida Console", Courier, monospace;
+    text-align: center;
+}
+
+.side-by-side-container {
+    display: flex;
+}
+
+.side-by-side-element {
+    flex: 33%;
+}
+
+.action-border {
+  border-color:red;
+  border-style: solid;
+  border-radius: 5px;
+  margin: 15px;
+  padding: 5px;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 50px 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+td {
+  padding: 10px 0;
+}
+
+th {
+  padding: 10px 0;
+}
