@@ -1,14 +1,26 @@
 var records;
-var journal = new Array();
+var journal;
+var ongoingTransactions;
+
+var app;
 
 // transaction should never be assigned an identifier of zero
 var currentTransaction = 1;
-var ongoingTransactions = new Object();
 
 function initialize() {
   records = initializeRecords(8);
-  displayRecords(records);
-  updateKeyDropDown(records);
+  journal = new Array();
+  currentTransaction = 1;
+  ongoingTransactions = new Object();
+
+  app = new Vue({
+    el: "#application",
+    data: {
+      journal: journal,
+      ongoingTransactions: ongoingTransactions,
+      records: records
+    }
+  })
 }
 
 function initializeRecords(count) {
@@ -32,19 +44,15 @@ function initializeRecords(count) {
 }
 
 function startTransaction() {
-  var toReturn = currentTransaction;
+  var r = currentTransaction;
   currentTransaction += 1;
 
   // update on-going transaction set
-  ongoingTransactions[toReturn] = {
+  Vue.set(ongoingTransactions, r, {
     acquiredLocks: []
-  };
+  });
 
-  displayOnGoingTransactions(ongoingTransactions);
-  updateTransactionDropDown(ongoingTransactions);
-
-  // update output
-  return toReturn;
+  return r;
 }
 
 function updateWrapper() {
@@ -67,10 +75,6 @@ function updateWrapper() {
   if (!update(transactionValue, keyValue, valueValue)) {
     console.log("update: fail");
   }
-
-  // update display
-  displayJournal(journal);
-  displayRecords(records);
 }
 
 function update(transaction, key, value) {
@@ -117,12 +121,6 @@ function commitWrapper() {
   transaction.value = "";
 
   commit(transactionValue);
-
-  // update display
-  displayRecords(records);
-  displayOnGoingTransactions(ongoingTransactions);
-  displayJournal(journal);
-  updateTransactionDropDown(ongoingTransactions);
 }
 
 function commit(t) {
@@ -146,7 +144,7 @@ function commit(t) {
   }
 
   // update ongoing transactions
-  delete ongoingTransactions[t];
+  Vue.delete(ongoingTransactions, t);
 }
 
 // given the journal, returns a list on of uncommited transactions
@@ -175,29 +173,29 @@ function uncommitedTransactions(journal) {
 }
 
 function systemCrash() {
-  ongoingTransactions = [];
+  abortTransactions(ongoingTransactions);
   releaseLocks(records);
 
   var toRollBack = uncommitedTransactions(journal);
 
-  var reverseJournal = journal.reverse();
-  var newJournal = reverseJournal;
+  var reverseJournal = journal.slice().reverse();
 
   reverseJournal.forEach((element, i) => {
     var obj = JSON.parse(element)
 
     if (toRollBack.includes(obj.transaction) && obj.action == "update") {
       records[obj.key].value = obj.previousValue;
-      delete newJournal[i];
+      journal.splice(journal.length - i - 1, 1);
     }
   });
+}
 
-  journal = newJournal.reverse().filter(Boolean);
-
-  displayJournal(journal);
-  displayRecords(records);
-  displayOnGoingTransactions(ongoingTransactions);
-  updateTransactionDropDown(ongoingTransactions);
+// remove all properties of ongoing transaction object
+// such that the removal is compatible with Vue
+function abortTransactions(t) {
+  for (var transactionKey in t) {
+    Vue.delete(t, transactionKey);
+  }
 }
 
 function releaseLocks(r) {
@@ -205,23 +203,3 @@ function releaseLocks(r) {
     r[recordKey].lock = 0;
   }
 }
-
-// display state ~ calls all display methods
-// use textbox ~ output box
-// drop down box for transaction and entries
-
-
-// link database site on main site
-
-
-// anotation
-// how to use the tool
-
-// cleanup variable names 
-// remove global variables
-
-// reboot method
-// reset on-going transaction set
-
-
-// table styling and centering

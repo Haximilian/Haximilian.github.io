@@ -6,49 +6,82 @@
     <title>Haximilian</title>
     <link rel="stylesheet" href="databaseStyle.css">
     <script type="text/javascript" src="model.js"></script>
-    <script type="text/javascript" src="view.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
     <script>
       window.onload = initialize;
     </script>
   </head>
   <body>
     <h1>Database Components & Properties</h1>
-    <div id="start" class="action-border">
-      <h3>start</h3>
-      <button type="button" onclick="startTransaction()">start</button>
-    </div>
-    <div id="update" class="action-border">
-      <h3>update</h3>
-      <label for="update-transaction">transaction:</label>
-      <select id="update-transaction"></select>
-      <label for="update-key">key:</label>
-      <select id="update-key"></select>
-      <label for="update-value">value:</label>
-      <input type="text" id="update-value"></input>
-      <input type="submit" value="update" onclick="updateWrapper()"></input>
-    </div>
-    <div id="commit" class="action-border">
-      <h3>commit</h3>
-      <label for="commit-transaction">transaction:</label>
-      <select id="commit-transaction"></select>
-      <input type="submit" value="commit" onclick="commitWrapper()"></input>
-    </div>
-    <div id="system-crash" class="action-border">
-      <h3>system-crash</h3>
-      <input type="submit" value="system-crash" onclick="systemCrash()"></input>
-    </div>
-    <div class="side-by-side-container">
-      <div class="side-by-side-element">
-        <h3>records</h3>
-        <div id="records"></div>
+    <div id="application">
+      <div id="start" class="action-border">
+        <h3>start</h3>
+        <button type="button" onclick="startTransaction()">start</button>
       </div>
-      <div class="side-by-side-element">
-        <h3>on-going transactions</h3>
-        <div id="on-going-transaction"></div>
+      <div id="update" class="action-border">
+        <h3>update</h3>
+        <label for="update-transaction">transaction:</label>
+        <select id="update-transaction">
+          <option v-for="(value, key) in ongoingTransactions" bind:value="key">
+            {{key}}
+          </option>
+        </select>
+        <label for="update-key">key:</label>
+        <select id="update-key">
+          <option v-for="(value, key) in records" bind:value="key">
+            {{key}}
+          </option>
+        </select>
+        <label for="update-value">value:</label>
+        <input type="text" id="update-value"></input>
+        <input type="submit" value="update" onclick="updateWrapper()"></input>
       </div>
-      <div class="side-by-side-element">
-        <h3>journal</h3>
-        <div id="journal"></div>
+      <div id="commit" class="action-border">
+        <h3>commit</h3>
+        <label for="commit-transaction">transaction:</label>
+        <select id="commit-transaction">
+          <option v-for="(value, key) in ongoingTransactions" bind:value="key">
+            {{key}}
+          </option>
+        </select>
+        <input type="submit" value="commit" onclick="commitWrapper()"></input>
+      </div>
+      <div id="system-crash" class="action-border">
+        <h3>system-crash</h3>
+        <input type="submit" value="system-crash" onclick="systemCrash()"></input>
+      </div>
+      <div class="side-by-side-container">
+        <div class="side-by-side-element">
+          <h3>records</h3>
+          <table>
+            <tr>
+              <th>key</th>
+              <th>value</th>
+              <th>lock</th>
+            </tr>
+            <tr v-for="(value, key) in records">
+              <td>{{ key }}</td>
+              <td>{{ value.value }}</td>
+              <td>{{ value.lock }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="side-by-side-element">
+          <h3>on-going transactions</h3>
+          <table>
+            <tr v-for="(value, key) in ongoingTransactions">
+              <td>{{ key }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="side-by-side-element">
+          <h3>journal</h3>
+          <ol>
+            <li v-for="value in journal">
+              {{ value }}
+            </li>
+          </ol>
+        </div>
       </div>
     </div>
   </body>
