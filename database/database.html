@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Haximilian</title>
+    <title>Haximilian: Atomicity</title>
     <link rel="stylesheet" href="databaseStyle.css">
     <script type="text/javascript" src="model.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
@@ -12,14 +12,27 @@
     </script>
   </head>
   <body>
-    <h1>Database Components & Properties</h1>
+    <h1>Atomicity: Redo Logging</h1>
+    <h3>introduction</h3>
+    <p>
+      Databases and similar systems often implement atomic transactions. 
+      Transactions are groups of statements and the atomicity property guarantees that either all or none of a transaction's statements will modify the system's state.
+      Commiting a transaction ensures that its statements are applied to the system's state.
+      If an uncommited transaction is in progress and the system crashes, all statements must be undone.
+      Our scheme must be robust; a crash could occur at anytime even while we are recovering from a previous crash.
+      Below, you'll find an implementation of atomic transactions using a redo logging scheme.
+    </p>
+    <h3>usage</h3>
+    <p>
+      Start by creating a transaction. Update a record to a numeric value using one of the ongoing transaction and notice a new entry is added to the journal / log. Simulate a system crash and watch all uncommited transaction get rolled back.
+    </p>
     <div id="application">
       <div id="start" class="action-border">
-        <h3>start</h3>
+        <h3>start-transaction</h3>
         <button type="button" onclick="startTransaction()">start</button>
       </div>
       <div id="update" class="action-border">
-        <h3>update</h3>
+        <h3>update-record</h3>
         <label for="update-transaction">transaction:</label>
         <select id="update-transaction">
           <option v-for="(value, key) in ongoingTransactions" bind:value="key">
@@ -37,7 +50,7 @@
         <input type="submit" value="update" onclick="updateWrapper()"></input>
       </div>
       <div id="commit" class="action-border">
-        <h3>commit</h3>
+        <h3>commit-transaction</h3>
         <label for="commit-transaction">transaction:</label>
         <select id="commit-transaction">
           <option v-for="(value, key) in ongoingTransactions" bind:value="key">
@@ -75,7 +88,7 @@
           </table>
         </div>
         <div class="side-by-side-element">
-          <h3>journal</h3>
+          <h3>journal / log</h3>
           <ol>
             <li v-for="value in journal">
               {{ value }}

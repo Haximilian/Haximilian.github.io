@@ -185,7 +185,7 @@ function systemCrash() {
 
     if (toRollBack.includes(obj.transaction) && obj.action == "update") {
       records[obj.key].value = obj.previousValue;
-      journal.splice(journal.length - i - 1, 1);
+      journal.splice(reverseJournal.length - i - 1, 1);
     }
   });
 }
