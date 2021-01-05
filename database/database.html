@@ -18,7 +18,7 @@
       Databases and similar systems often implement atomic transactions. 
       Transactions are groups of statements and the atomicity property guarantees that either all or none of a transaction's statements will modify the system's state.
       Commiting a transaction ensures that its statements are applied to the system's state.
-      If an uncommited transaction is in progress and the system crashes, all statements must be undone.
+      If an uncommited transaction is in progress and the system crashes, all executed statements belonging to the transaction must be undone.
       Our scheme must be robust; a crash could occur at anytime even while we are recovering from a previous crash.
       Below, you'll find an implementation of atomic transactions using a redo logging scheme.
     </p>
