@@ -1,0 +1,6 @@
+Functional languages adhere to property called "referencial transparency".
+This property states that a given a call to a specific function and argument, it can be replaced with it's return value.
+This implies that every time we call a function with a specific argument, it produces the same result.
+This property makes function programs much easier to reason about.
+Given this property, how would we implement a random number generator in a functional programming language.
+This is exactly the problem that monads solve...
