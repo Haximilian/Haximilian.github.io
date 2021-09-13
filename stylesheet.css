@@ -1,0 +1,41 @@
+body {
+    font-family: "Lucida Console", Courier, monospace;
+    background-color: black;
+    color: white;
+    cursor: crosshair;
+}
+
+a {
+    color: rgb(255, 95, 0);
+}
+
+.main {
+    text-align: center;
+    line-height: 1.5;
+    font-size: 18px;
+    max-width: 1024px;
+    margin: auto;
+}
+
+.container-j {
+    margin: auto;
+    width: 50%;
+}
+
+.parent-j {
+    position: absolute;
+    text-align: left;
+    line-height: 1.5;
+    font-size: 18px;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);}
+
+.child-j {
+    margin-left: 48px;
+}
+
+::selection {
+    color: white;
+    background: rgb(255, 95, 0);
+}
