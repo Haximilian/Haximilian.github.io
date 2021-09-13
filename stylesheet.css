@@ -26,7 +26,8 @@ a {
     position: absolute;
     text-align: left;
     line-height: 1.5;
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: bold;
     top: 50%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);}
